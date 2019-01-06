@@ -15,10 +15,10 @@ import org.usfirst.frc.team6500.trc.wrappers.sensors.TRCEncoderSet;
 import org.usfirst.frc.team6500.trc.wrappers.sensors.TRCGyroBase;
 import org.usfirst.frc.team6500.trc.wrappers.systems.drives.TRCMecanumDrive;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.TimedRobot;
 
 
-public class Robot extends IterativeRobot
+public class Robot extends TimedRobot
 {
     // Robot member definitions
     TRCGyroBase gyro;

@@ -4,7 +4,7 @@ plugins {
     id "de.undercouch.download" version "3.4.3"
 }
 
-def TRCversion = "2019.0.0"
+def TRCversion = "2019.0.1"
 
 download {
     src "https://github.com/6500gearcats/Tin-Reinforced-Concrete/releases/download/${TRCversion}/Tin-Reinforced-Concrete-${TRCversion}.jar"
