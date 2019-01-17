@@ -36,17 +36,17 @@ public class Constants
 
 
     // Drive Constants
-    public final static int DRIVE_WHEEL_FRONTLEFT = 2;
-    public final static int DRIVE_WHEEL_REARLEFT = 0;
-	public final static int DRIVE_WHEEL_FRONTRIGHT = 3;
-    public final static int DRIVE_WHEEL_REARRIGHT = 1;
+    public final static int DRIVE_WHEEL_FRONTLEFT = 3;
+    public final static int DRIVE_WHEEL_REARLEFT = 1;
+	public final static int DRIVE_WHEEL_FRONTRIGHT = 4;
+    public final static int DRIVE_WHEEL_REARRIGHT = 2;
     public final static int DRIVE_WHEEL_PORTS[] = {DRIVE_WHEEL_FRONTLEFT, DRIVE_WHEEL_REARLEFT, DRIVE_WHEEL_FRONTRIGHT, DRIVE_WHEEL_REARRIGHT};
-    public final static SpeedControllerType DRIVE_WHEEL_TYPES[] = {SpeedControllerType.PWMTalonSRX, SpeedControllerType.PWMTalonSRX, SpeedControllerType.PWMTalonSRX, SpeedControllerType.PWMTalonSRX};
+    public final static SpeedControllerType DRIVE_WHEEL_TYPES[] = {SpeedControllerType.CANTalonSRX, SpeedControllerType.CANTalonSRX, SpeedControllerType.CANTalonSRX, SpeedControllerType.CANTalonSRX};
     
 
     // Directional System (Grabber/Lift) Constants
-    public final static int LIFT_MOTOR_LEFT = 6;
-    public final static int LIFT_MOTOR_RIGHT = 8;
+    public final static int LIFT_MOTOR_LEFT = 0;
+    public final static int LIFT_MOTOR_RIGHT = 1;
     public final static int LIFT_MOTORS[] = {LIFT_MOTOR_LEFT, LIFT_MOTOR_RIGHT};
     public final static SpeedControllerType LIFT_MOTOR_TYPES[] = {SpeedControllerType.Spark, SpeedControllerType.Spark};
     public final static double LIFT_TIME_SCALE_UP = 2.75;
