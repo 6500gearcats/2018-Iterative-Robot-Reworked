@@ -32,7 +32,7 @@ public class AutoMapper
         // Determine best route
         TRCAutoRoute bestRoute = null;
 
-        if(target == Constants.OPTIONS_TARGET_BASELINE) { bestRoute = new AutoLine(); }
+        if(target == Constants.OPTIONS_TARGET_BASELINE) { return new AutoLine(); }
 		
 		//If we're in the middle, check to see if we want the scale or the switch, and do that
 		if(position == Constants.OPTIONS_POSITION_MIDDLE) {

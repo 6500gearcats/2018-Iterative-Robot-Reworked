@@ -61,15 +61,16 @@ public class Constants
 
 
     // Encoder Constants
-    public final static int ENCODER_INPUT_FL_A = 4;
-	public final static int ENCODER_INPUT_FL_B = 5;
-	public final static int ENCODER_INPUT_FR_A = 6;
-	public final static int ENCODER_INPUT_FR_B = 7;
-	public final static int ENCODER_INPUT_RL_A = 2;
-	public final static int ENCODER_INPUT_RL_B = 3;
-	public final static int ENCODER_INPUT_RR_A = 0;
-    public final static int ENCODER_INPUT_RR_B = 1;
-    public final static int ENCODER_INPUTS[] = {ENCODER_INPUT_FL_A, ENCODER_INPUT_FL_B, ENCODER_INPUT_FR_A, ENCODER_INPUT_FR_B, ENCODER_INPUT_RL_A, ENCODER_INPUT_RL_B, ENCODER_INPUT_RR_A, ENCODER_INPUT_RR_B};
+    // public final static int ENCODER_INPUT_FL_A = 4;
+	// public final static int ENCODER_INPUT_FL_B = 5;
+	// public final static int ENCODER_INPUT_FR_A = 6;
+	// public final static int ENCODER_INPUT_FR_B = 7;
+	// public final static int ENCODER_INPUT_RL_A = 2;
+	// public final static int ENCODER_INPUT_RL_B = 3; 
+	// public final static int ENCODER_INPUT_RR_A = 0;
+    // public final static int ENCODER_INPUT_RR_B = 1;
+    public final static int ENCODER_INPUTS[] = {DRIVE_WHEEL_REARRIGHT, 0, DRIVE_WHEEL_FRONTRIGHT, 0, DRIVE_WHEEL_REARLEFT, 0, DRIVE_WHEEL_FRONTLEFT, 0};
+    public final static EncoderType ENCODER_TYPES[] = {EncoderType.Talon, EncoderType.Talon, EncoderType.Talon, EncoderType.Talon};
 
-    public final static double ENCODER_DISTANCE_PER_PULSE = 0.0990487842984034;
+    public final static double[] ENCODER_DISTANCES_PER_PULSE = {0.53, 0.0240, 0.02832, 0.02542};
 }
