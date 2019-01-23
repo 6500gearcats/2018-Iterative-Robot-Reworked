@@ -6,22 +6,18 @@ plugins {
 
 def TRCversion = "2019.0.4"
 
-def downloadTRC()
-{
-    try {
-        download {
-            src "https://github.com/6500gearcats/Tin-Reinforced-Concrete/releases/download/${TRCversion}/Tin-Reinforced-Concrete-${TRCversion}.jar"
-            dest buildDir
-            overwrite true
-        }
-    }
-    catch (Exception e)
-    {
-        println 'Not connected to internet, TRC will not be updated.'
+try {
+    download {
+        src "https://github.com/6500gearcats/Tin-Reinforced-Concrete/releases/download/${TRCversion}/Tin-Reinforced-Concrete-${TRCversion}.jar"
+        dest buildDir
+        overwrite true
     }
 }
+catch (Exception e)
+{
+    println e
+}
 
-downloadTRC()
 
 
 def ROBOT_MAIN_CLASS = "org.usfirst.frc.team6500.robot.Robot"
