@@ -44,6 +44,7 @@ public class Robot extends TimedRobot
         TRCNetworkData.createDataPoint("Encoder 1");
         TRCNetworkData.createDataPoint("Encoder 2");
         TRCNetworkData.createDataPoint("Encoder 3");
+        TRCNetworkData.createDataPoint("Gyro");
         TRCNetworkVision.initializeVision();
         //TRCCamera.initializeCamera();
 
@@ -132,6 +133,7 @@ public class Robot extends TimedRobot
         TRCNetworkData.updateDataPoint("Encoder 1", encoders.getIndividualDistanceTraveled(1));
         TRCNetworkData.updateDataPoint("Encoder 2", encoders.getIndividualDistanceTraveled(2));
         TRCNetworkData.updateDataPoint("Encoder 3", encoders.getIndividualDistanceTraveled(3));
+        TRCNetworkData.updateDataPoint("Gyro", gyro.getAngle());
     }
 
     public static void main(String... args)
