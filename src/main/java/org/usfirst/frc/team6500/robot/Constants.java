@@ -5,9 +5,7 @@ import org.usfirst.frc.team6500.trc.util.TRCTypes.*;
 public class Constants
 {
     // Input Constants
-    public static final int INPUT_DRIVER_PORT = 0;
-    public static final int INPUT_GUNNER_PORT = 1;
-    public static final int INPUT_PORTS[] = {INPUT_DRIVER_PORT, INPUT_GUNNER_PORT};
+    public static final int INPUT_PORT = 0;
 
     public static final int INPUT_GRAB_PULL_BUTTON = 3;
     public static final int INPUT_GRAB_RELEASE_BUTTON = 5;
@@ -21,7 +19,7 @@ public class Constants
     // Speed Constants
     public static final double SPEED_BASE = 0.85;
     public static final double SPEED_BOOST = 0.95;
-    public static final double SPEED_AUTO = 0.65;
+    public static final double SPEED_AUTO = 0.35;
 
 
     // Options Constants
