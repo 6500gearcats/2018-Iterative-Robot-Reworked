@@ -110,8 +110,8 @@ public class Robot extends TimedRobot
         Runnable[] upActions = {lift::driveForward, lift::fullStop};
         Runnable[] downActions = {lift::driveReverse, lift::fullStop};
 
-        TRCDriveInput.bindButtonPress(TRCController.BUMPER_LEFT, upActions);
-        TRCDriveInput.bindButtonPress(TRCController.BUMPER_RIGHT, downActions);
+        TRCDriveInput.bindButton(TRCController.BUMPER_LEFT, upActions);
+        TRCDriveInput.bindButton(TRCController.BUMPER_RIGHT, downActions);
     }
 
     /**
