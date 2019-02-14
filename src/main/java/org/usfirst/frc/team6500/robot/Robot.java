@@ -11,13 +11,17 @@ import org.usfirst.frc.team6500.trc.sensors.TRCNetworkVision;
 import org.usfirst.frc.team6500.trc.systems.TRCDirectionalSystem;
 import org.usfirst.frc.team6500.trc.systems.TRCDriveInput;
 import org.usfirst.frc.team6500.trc.util.TRCNetworkData;
-import org.usfirst.frc.team6500.trc.util.TRCTypes;
+import org.usfirst.frc.team6500.trc.util.TRCTypes.*;
 import org.usfirst.frc.team6500.trc.wrappers.sensors.TRCEncoderSet;
 import org.usfirst.frc.team6500.trc.wrappers.sensors.TRCGyroBase;
 import org.usfirst.frc.team6500.trc.wrappers.systems.drives.TRCMecanumDrive;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
+
+import org.usfirst.frc.team6500.robot.auto.AutoAlign;
 
 
 public class Robot extends TimedRobot
@@ -27,6 +31,8 @@ public class Robot extends TimedRobot
     TRCEncoderSet encoders;
     TRCMecanumDrive drive;
     TRCDirectionalSystem lift, grabber;
+    AnalogInput leftProx, rightProx;
+    DigitalInput hE;
     int positionOptionID = 1;
     int targetOptionID = 2;
 
@@ -38,19 +44,22 @@ public class Robot extends TimedRobot
     public void robotInit()
     {
         // Setup: Communications
-        TRCNetworkData.initializeNetworkData(TRCTypes.DataInterfaceType.Board);
+        TRCNetworkData.initializeNetworkData(DataInterfaceType.Board);
         TRCNetworkData.createDataPoint("Encoder Output");
         TRCNetworkData.createDataPoint("Encoder 0");
         TRCNetworkData.createDataPoint("Encoder 1");
         TRCNetworkData.createDataPoint("Encoder 2");
         TRCNetworkData.createDataPoint("Encoder 3");
         TRCNetworkData.createDataPoint("Gyro");
+        TRCNetworkData.createDataPoint("Left Proximity");
+        TRCNetworkData.createDataPoint("Right Proximity");
+        TRCNetworkData.createDataPoint("Hall Effect");
         TRCNetworkVision.initializeVision();
         //TRCCamera.initializeCamera();
 
 
         // Setup: Systems: Drivetrain
-        drive = new TRCMecanumDrive(Constants.DRIVE_WHEEL_PORTS, Constants.DRIVE_WHEEL_TYPES, true);
+        drive = new TRCMecanumDrive(Constants.DRIVE_WHEEL_PORTS, Constants.DRIVE_WHEEL_TYPES, Constants.DRIVE_WHEEL_INVERTS, true);
 
         // Setup: Systems: Directional
         lift = new TRCDirectionalSystem(Constants.LIFT_MOTORS, Constants.LIFT_MOTOR_TYPES, true, 1.0, -0.6);
@@ -59,13 +68,18 @@ public class Robot extends TimedRobot
         //TRCDirectionalSystemAction.registerSystem("Grabber", grabber);
 
         // Setup: Systems: Sensors
-        gyro = new TRCGyroBase(TRCTypes.GyroType.NavX);
+        gyro = new TRCGyroBase(GyroType.NavX);
         encoders = new TRCEncoderSet(Constants.ENCODER_INPUTS, Constants.ENCODER_DISTANCES_PER_PULSE, true, 4, Constants.ENCODER_TYPES);
         encoders.resetAllEncoders();
+        leftProx  = new AnalogInput(Constants.PROXIMITY_LEFT);
+        rightProx = new AnalogInput(Constants.PROXIMITY_RIGHT);
+        hE = new DigitalInput(0);
+        AutoAlign.setupAlignment(drive, leftProx, rightProx);
 
 
         // Setup: Autonomous
-        TRCDrivePID.initializeTRCDrivePID(encoders, gyro, drive, TRCTypes.DriveType.Mecanum, Constants.SPEED_AUTO);
+        TRCDrivePID.initializeTRCDrivePID(encoders, gyro, drive, DriveType.Mecanum, Constants.SPEED_AUTO);
+        AutoAlign.setupAlignment(drive, leftProx, rightProx);
 
         // Setup: Autonomous: Options
         TRCNetworkData.putOptions(Constants.OPTIONS_POSITIONS, positionOptionID);
@@ -74,7 +88,7 @@ public class Robot extends TimedRobot
 
         // Setup: Input
         
-        TRCDriveInput.initializeDriveInput(Constants.INPUT_PORTS, Constants.SPEED_BASE, Constants.SPEED_BOOST);
+        TRCDriveInput.initializeDriveInput(Constants.INPUT_PORTS, Constants.INPUT_TYPES, Constants.SPEED_BASE, Constants.SPEED_BOOST);
 
         // Setup: Input: Button Bindings: Grabber
         //TRCDriveInput.bindButton(Constants.INPUT_GUNNER_PORT, Constants.INPUT_GRAB_PULL_BUTTON, grabber::driveForward);
@@ -82,9 +96,11 @@ public class Robot extends TimedRobot
         //TRCDriveInput.bindButtonAbsence(Constants.INPUT_GUNNER_PORT, Constants.INPUT_GRAB_BUTTONS, grabber::fullStop);
 
         // Setup: Input: Button Bindings: Lift
-        TRCDriveInput.bindButton(Constants.INPUT_DRIVER_PORT, Constants.INPUT_LIFT_ELEVATE_BUTTON, lift::driveForward);
-        TRCDriveInput.bindButton(Constants.INPUT_DRIVER_PORT, Constants.INPUT_LIFT_DESCEND_BUTTON, lift::driveReverse);
-        TRCDriveInput.bindButtonAbsence(Constants.INPUT_DRIVER_PORT, Constants.INPUT_LIFT_BUTTONS, lift::fullStop);
+        // TRCDriveInput.bindButtonPress(Constants.INPUT_DRIVER_PORT, Constants.INPUT_LIFT_ELEVATE_BUTTON, lift::driveForward);
+        // TRCDriveInput.bindButtonPress(Constants.INPUT_DRIVER_PORT, Constants.INPUT_LIFT_DESCEND_BUTTON, lift::driveReverse);
+        // TRCDriveInput.bindButtonAbsence(Constants.INPUT_DRIVER_PORT, Constants.INPUT_LIFT_BUTTONS, lift::fullStop);
+
+        TRCDriveInput.bindButtonPress(Constants.INPUT_DRIVER_PORT, 4, AutoAlign::alignWithFloorTape);
     }
 
     /**
@@ -124,16 +140,19 @@ public class Robot extends TimedRobot
     public void teleopPeriodic()
     {
         // Check all inputs
-        TRCDriveInput.updateDriveInput();
+        TRCDriveInput.checkButtonBindings();
         // And drive the robot
         drive.driveCartesian(TRCDriveInput.getStickDriveParams(Constants.INPUT_DRIVER_PORT));
 
-        TRCNetworkData.updateDataPoint("Encoder Output", encoders.getAverageDistanceTraveled());
+        TRCNetworkData.updateDataPoint("Encoder Output", encoders.getAverageDistanceTraveled(DirectionType.ForwardBackward));
         TRCNetworkData.updateDataPoint("Encoder 0", encoders.getIndividualDistanceTraveled(0));
         TRCNetworkData.updateDataPoint("Encoder 1", encoders.getIndividualDistanceTraveled(1));
         TRCNetworkData.updateDataPoint("Encoder 2", encoders.getIndividualDistanceTraveled(2));
         TRCNetworkData.updateDataPoint("Encoder 3", encoders.getIndividualDistanceTraveled(3));
         TRCNetworkData.updateDataPoint("Gyro", gyro.getAngle());
+        TRCNetworkData.updateDataPoint("Left Proximity", AutoAlign.calculateUltrasonicDistance(leftProx.getVoltage()));
+        TRCNetworkData.updateDataPoint("Right Proximity", AutoAlign.calculateUltrasonicDistance(rightProx.getVoltage()));
+        TRCNetworkData.updateDataPoint("Hall Effect", hE.get());
     }
 
     public static void main(String... args)
