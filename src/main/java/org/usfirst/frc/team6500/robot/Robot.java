@@ -10,6 +10,8 @@ import org.usfirst.frc.team6500.trc.sensors.TRCCamera;
 import org.usfirst.frc.team6500.trc.sensors.TRCNetworkVision;
 import org.usfirst.frc.team6500.trc.systems.TRCDirectionalSystem;
 import org.usfirst.frc.team6500.trc.systems.TRCDriveInput;
+import org.usfirst.frc.team6500.trc.util.TRCController;
+import org.usfirst.frc.team6500.trc.util.TRCDriveParams;
 import org.usfirst.frc.team6500.trc.util.TRCNetworkData;
 import org.usfirst.frc.team6500.trc.util.TRCTypes.*;
 import org.usfirst.frc.team6500.trc.wrappers.sensors.TRCEncoderSet;
@@ -142,7 +144,12 @@ public class Robot extends TimedRobot
         // Check all inputs
         TRCDriveInput.checkButtonBindings();
         // And drive the robot
-        drive.driveCartesian(TRCDriveInput.getStickDriveParams(Constants.INPUT_DRIVER_PORT));
+        TRCDriveParams params = TRCDriveInput.getStickDriveParams(Constants.INPUT_DRIVER_PORT);
+        TRCController controller = TRCDriveInput.getController(Constants.INPUT_DRIVER_PORT);
+        params.setRawX(controller.getAxis(XboxAxisType.LeftX));
+        params.setRawY(controller.getAxis(XboxAxisType.LeftY));
+        params.setRawZ(controller.getAxis(XboxAxisType.RightX));
+        drive.driveCartesian(params);
 
         TRCNetworkData.updateDataPoint("Encoder Output", encoders.getAverageDistanceTraveled(DirectionType.ForwardBackward));
         TRCNetworkData.updateDataPoint("Encoder 0", encoders.getIndividualDistanceTraveled(0));
