@@ -92,10 +92,8 @@ public class Robot extends TimedRobot
     {
         if (!hasCompleted)
         {
-            richardRunner.run();
+            TRCDrivePID.driveAround(12, 90);
             hasCompleted = true;
-        } else {
-            drive.driveCartesian(0, 0, 0);
         }
     }
 
