@@ -182,6 +182,8 @@ public class RemoteControl
      */
     private static boolean validatePort(int port)
     {
-        
+        // sorry for the formatting, its just compact!
+        for (RemoteControl rc : openConnections) if (rc.port == port) return false;
+        return true;
     }
 }

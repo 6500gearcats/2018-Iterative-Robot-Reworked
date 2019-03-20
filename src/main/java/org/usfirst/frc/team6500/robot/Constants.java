@@ -100,7 +100,7 @@ public class Constants
     public final static int REMOTECONTROL_ACTION_ROTATELEFT = 8;
     public final static int REMOTECONTROL_ACTION_ROTATERIGHT = 9;
 
-    public final static int REMOTECONTROL_DEFAULT_PORT = 7272;
+    public final static int REMOTECONTROL_DEFAULT_PORT = 7272; // default port will always be (from now on 'cause I say) 7272
 
     // Proximity Sensor Constants
     public final static int PROXIMITY_LEFT            = 0;

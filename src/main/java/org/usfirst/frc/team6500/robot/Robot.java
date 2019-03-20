@@ -1,6 +1,6 @@
 package org.usfirst.frc.team6500.robot;
 
-import org.usfirst.frc.team6500.robot.*;
+// import org.usfirst.frc.team6500.robot.*;
 /*
 import org.usfirst.frc.team6500.robot.Constants;
 import org.usfirst.frc.team6500.trc.auto.TRCDirectionalSystemAction;
@@ -17,8 +17,8 @@ import org.usfirst.frc.team6500.trc.wrappers.systems.drives.TRCMecanumDrive;
 import org.usfirst.frc.team6500.trc.auto.TRCDrivePID;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DigitalInput;
+// import edu.wpi.first.wpilibj.AnalogInput;
+// import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
 
 public class Robot extends TimedRobot
@@ -34,13 +34,13 @@ public class Robot extends TimedRobot
     int positionOptionID = 1;
     int targetOptionID = 2;
     */
-    public RemoteControl remoteController;
+    public RemoteControl remoteController = null;
 
     /**
      * Code here will run once as soon as the robot starts
      */
     @Override
-    public void robotInit() 
+    public void robotInit()
     {
         /*
         // Setup: Communications
@@ -129,7 +129,7 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousInit()
     {
-        remoteController = new RemoteControl(Constants.REMOTECONTROL_DEFAULT_PORT);
+        remoteController = new RemoteControl(); // create a new remote controller on port 7272
         remoteController.startRemoteConnection();
     }
 
