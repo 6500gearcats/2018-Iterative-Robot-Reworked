@@ -4,16 +4,32 @@ import org.usfirst.frc.team6500.trc.util.TRCTypes.*;
 
 public class Constants
 {
-    // Input Constants
-    public static final int INPUT_PORT = 0;
+    // Input Constants, Stick config
+    // public static final int INPUT_DRIVER_PORT = 0;
+    // public static final int INPUT_GUNNER_PORT = 1;
+    // public static final int INPUT_PORTS[] = {INPUT_DRIVER_PORT, INPUT_GUNNER_PORT};
+    // public static final ControllerType INPUT_TYPES[] = {ControllerType.Extreme3D, ControllerType.Extreme3D};
 
-    public static final int INPUT_GRAB_PULL_BUTTON = 3;
-    public static final int INPUT_GRAB_RELEASE_BUTTON = 5;
-    public static final int INPUT_GRAB_BUTTONS[] = {INPUT_GRAB_PULL_BUTTON, INPUT_GRAB_RELEASE_BUTTON};
+    // public static final int INPUT_GRAB_PULL_BUTTON = 3;
+    // public static final int INPUT_GRAB_RELEASE_BUTTON = 5;
+    // public static final Object INPUT_GRAB_BUTTONS[] = {INPUT_GRAB_PULL_BUTTON, INPUT_GRAB_RELEASE_BUTTON};
 
-    public static final int INPUT_LIFT_ELEVATE_BUTTON = 6;
-    public static final int INPUT_LIFT_DESCEND_BUTTON = 4;
-    public static final int INPUT_LIFT_BUTTONS[] = {INPUT_LIFT_ELEVATE_BUTTON, INPUT_LIFT_DESCEND_BUTTON};
+    // public static final int INPUT_LIFT_ELEVATE_BUTTON = 6;
+    // public static final int INPUT_LIFT_DESCEND_BUTTON = 4;
+    // public static final Object INPUT_LIFT_BUTTONS[] = {INPUT_LIFT_ELEVATE_BUTTON, INPUT_LIFT_DESCEND_BUTTON};
+
+    // Input Constants, Xbox config
+    public static final int INPUT_DRIVER_PORT = 0;
+    public static final int INPUT_PORTS[] = {INPUT_DRIVER_PORT};
+    public static final ControllerType INPUT_TYPES[] = {ControllerType.Xbox360};
+
+    // public static final int INPUT_GRAB_PULL_BUTTON = 3;
+    // public static final int INPUT_GRAB_RELEASE_BUTTON = 5;
+    // public static final Object INPUT_GRAB_BUTTONS[] = {INPUT_GRAB_PULL_BUTTON, INPUT_GRAB_RELEASE_BUTTON};
+
+    // public static final int INPUT_LIFT_ELEVATE_BUTTON = 6;
+    // public static final int INPUT_LIFT_DESCEND_BUTTON = 4;
+    // public static final Object INPUT_LIFT_BUTTONS[] = {INPUT_LIFT_ELEVATE_BUTTON, INPUT_LIFT_DESCEND_BUTTON};
 
 
     // Speed Constants
@@ -40,7 +56,8 @@ public class Constants
     public final static int DRIVE_WHEEL_REARRIGHT = 2;
     public final static int DRIVE_WHEEL_PORTS[] = {DRIVE_WHEEL_FRONTLEFT, DRIVE_WHEEL_REARLEFT, DRIVE_WHEEL_FRONTRIGHT, DRIVE_WHEEL_REARRIGHT};
     public final static SpeedControllerType DRIVE_WHEEL_TYPES[] = {SpeedControllerType.CANTalonSRX, SpeedControllerType.CANTalonSRX, SpeedControllerType.CANTalonSRX, SpeedControllerType.CANTalonSRX};
-    
+    public final static boolean DRIVE_WHEEL_INVERTS[]           = {false, false, false, false};
+
 
     // Directional System (Grabber/Lift) Constants
     public final static int LIFT_MOTOR_LEFT = 0;
@@ -83,4 +100,9 @@ public class Constants
     public final static int REMOTECONTROL_ACTION_ROTATELEFT = 8;
     public final static int REMOTECONTROL_ACTION_ROTATERIGHT = 9;
 
+
+    // Proximity Sensor Constants
+    public final static int PROXIMITY_LEFT            = 0;
+    public final static int PROXIMITY_RIGHT           = 1;
+    public final static double PROXIMITY_THRESHOLD_MM = 500.0;
 }
