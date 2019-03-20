@@ -81,7 +81,7 @@ public class RemoteControl
     private void interperateCommand(String command)
     {
         TRCDrivePID.grantSubautonomousAction();
-        TRCVector movement;
+        
         switch (command.charAt(0))
         {
             case Constants.REMOTECONTROL_ACTION_FORWARD:
