@@ -1,8 +1,5 @@
 package org.usfirst.frc.team6500.robot;
 
-import java.io.*;
-import java.net.*;
-
 import org.usfirst.frc.team6500.trc.util.*;
 /*
 import org.usfirst.frc.team6500.robot.Constants;
@@ -24,11 +21,9 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
 
-import org.usfirst.frc.team6500.robot.auto.AutoAlign;
-
-
 public class Robot extends TimedRobot
 {
+    /*
     // Robot member definitions
     TRCGyroBase gyro;
     TRCEncoderSet encoders;
@@ -38,6 +33,7 @@ public class Robot extends TimedRobot
     DigitalInput hE;
     int positionOptionID = 1;
     int targetOptionID = 2;
+    *
 
 
     /**
@@ -46,6 +42,7 @@ public class Robot extends TimedRobot
     @Override
     public void robotInit() 
     {
+        /*
 		int portNumber = 7272;
 		
 		try (
@@ -121,6 +118,7 @@ public class Robot extends TimedRobot
         // TRCDriveInput.bindButtonAbsence(Constants.INPUT_DRIVER_PORT, Constants.INPUT_LIFT_BUTTONS, lift::fullStop);
 
         TRCDriveInput.bindButtonPress(Constants.INPUT_DRIVER_PORT, 4, AutoAlign::alignWithFloorTape);
+        */
     }
 
     /**

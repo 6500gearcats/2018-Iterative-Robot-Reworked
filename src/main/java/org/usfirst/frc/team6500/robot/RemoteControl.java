@@ -6,9 +6,12 @@ import java.net.*;
 
 import org.usfirst.frc.team6500.robot.Constants;
 import org.usfirst.frc.team6500.trc.auto.TRCDrivePID;
+import org.usfirst.frc.team6500.trc.auto.TRCVector;
 import org.usfirst.frc.team6500.trc.util.TRCNetworkData;
 import org.usfirst.frc.team6500.trc.util.TRCTypes;
-import org.usfirst.frc.team6500.trc.util.TRCVector;
+import org.usfirst.frc.team6500.trc.util.TRCTypes.Direction;
+import org.usfirst.frc.team6500.trc.util.TRCTypes.DriveAction;
+import org.usfirst.frc.team6500.trc.util.TRCTypes.UnitType;
 
 public class RemoteControl
 {
@@ -81,51 +84,62 @@ public class RemoteControl
     private void interperateCommand(String command)
     {
         TRCDrivePID.grantSubautonomousAction();
-        
+        TRCVector movement = null;
         switch (command.charAt(0))
         {
             case Constants.REMOTECONTROL_ACTION_FORWARD:
             {
+                movement = new TRCVector(DriveAction.ForwardBack, 1, UnitType.Inches);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_FORWARDRIGHT:
             {
+                movement = new TRCVector(1, UnitType.Inches, Direction.ForwardRight);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_RIGHT:
             {
+                movement = new TRCVector(DriveAction.LeftRight, 1, UnitType.Inches);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_BACKWARDRIGHT:
             {
+                movement = new TRCVector(1, UnitType.Inches, Direction.BackwardRight);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_BACKWARD:
             {
+                movement = new TRCVector(DriveAction.ForwardBack, -1, UnitType.Inches);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_BACKWARDLEFT:
             {
+                movement = new TRCVector(1, UnitType.Inches, Direction.BackwardLeft);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_LEFT:
             {
+                movement = new TRCVector(DriveAction.LeftRight, -1, UnitType.Inches);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_FORWARDLEFT:
             {
+                movement = new TRCVector(1, UnitType.Inches, Direction.ForwardLeft);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_ROTATELEFT:
             {
+                movement = new TRCVector(DriveAction.Rotation, -90, UnitType.Degrees);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_ROTATERIGHT:
             {
+                movement = new TRCVector(DriveAction.Rotation, 90, UnitType.Degrees);
                 break;
             }
-            default: TRCNetworkData.logString(TRCTypes.VerbosityType.Log_Error, "Recieved invalid remote control command"); break;
+            default: TRCNetworkData.logString(TRCTypes.VerbosityType.Log_Error, "Recieved invalid remote control command"); TRCDrivePID.denySubautonomousAction(); return;
         }
+        TRCDrivePID.drive(movement);
         TRCDrivePID.denySubautonomousAction();
     }
 }
