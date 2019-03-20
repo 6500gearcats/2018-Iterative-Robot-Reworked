@@ -12,11 +12,12 @@ import org.usfirst.frc.team6500.trc.util.TRCTypes;
 import org.usfirst.frc.team6500.trc.util.TRCTypes.Direction;
 import org.usfirst.frc.team6500.trc.util.TRCTypes.DriveAction;
 import org.usfirst.frc.team6500.trc.util.TRCTypes.UnitType;
+import org.usfirst.frc.team6500.trc.util.TRCTypes.VerbosityType;
 
 public class RemoteControl
 {
     static private ArrayList<RemoteControl> openConnections;
-    private Integer port = 7272; // default port will always be (from now on 'cause I say) 7272
+    private Integer port = Constants.REMOTECONTROL_DEFAULT_PORT;
     private Thread runnable = new Thread(this::control);
     private boolean isValid = false;
 
@@ -26,7 +27,11 @@ public class RemoteControl
     RemoteControl(Integer port)
     {
         this.port = port;
-        isValid = true;
+        if (!RemoteControl.validatePort(port))
+        {
+            TRCNetworkData.logString(VerbosityType.Log_Error, "RemoteControl:RemoteControl(Integer):Unable to bind to port '" + port + "' because it is already bound!");
+        }
+        else isValid = true;
         openConnections.add(this);
     }
 
@@ -35,7 +40,11 @@ public class RemoteControl
      */
     RemoteControl()
     {
-        isValid = true;
+        if (!RemoteControl.validatePort(port))
+        {
+            TRCNetworkData.logString(VerbosityType.Log_Error, "RemoteControl:RemoteControl():Unable to bind to port '" + port + "' because it is already bound!");
+        }
+        else isValid = true;
         openConnections.add(this);
     }
 
@@ -54,8 +63,13 @@ public class RemoteControl
     public void stopRemoteConnection()
     {
         isValid = false;
+        openConnections.remove(this);
     }
 
+    /**
+     * The control function that works network stuff. NEVER CALL THIS FUNCTION
+     * EXCEPT THROUGH A DIFFERENT THREAD AS IT BLOCKS!!!
+     */
     private void control()
     {
         try (
@@ -87,6 +101,11 @@ public class RemoteControl
 
     public static ArrayList<RemoteControl> openConnections() {return openConnections;}
 
+    /**
+     * Interperates a command sent to the control server
+     * 
+     * @param command the raw String data recieved from the controller
+     */
     private void interperateCommand(String command)
     {
         boolean preAuthorized = TRCDrivePID.isSubautonomousAuthorized();
@@ -154,5 +173,15 @@ public class RemoteControl
         }
         TRCDrivePID.drive(movement);
         if (!preAuthorized) TRCDrivePID.denySubautonomousAction();
+    }
+
+    /**
+     * Checks to make sure a port isn't being used
+     * 
+     * @param port the port number to check
+     */
+    private static boolean validatePort(int port)
+    {
+        
     }
 }
