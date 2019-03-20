@@ -1,10 +1,9 @@
 package org.usfirst.frc.team6500.robot;
 
-import org.usfirst.frc.team6500.trc.util.*;
+import org.usfirst.frc.team6500.robot.*;
 /*
 import org.usfirst.frc.team6500.robot.Constants;
 import org.usfirst.frc.team6500.trc.auto.TRCDirectionalSystemAction;
-import org.usfirst.frc.team6500.trc.auto.TRCDrivePID;
 import org.usfirst.frc.team6500.trc.systems.TRCDirectionalSystem;
 import org.usfirst.frc.team6500.trc.systems.TRCDriveInput;
 import org.usfirst.frc.team6500.trc.util.TRCController;
@@ -15,6 +14,7 @@ import org.usfirst.frc.team6500.trc.wrappers.sensors.TRCEncoderSet;
 import org.usfirst.frc.team6500.trc.wrappers.sensors.TRCGyroBase;
 import org.usfirst.frc.team6500.trc.wrappers.systems.drives.TRCMecanumDrive;
 */
+import org.usfirst.frc.team6500.trc.auto.TRCDrivePID;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -33,8 +33,8 @@ public class Robot extends TimedRobot
     DigitalInput hE;
     int positionOptionID = 1;
     int targetOptionID = 2;
-    *
-
+    */
+    public RemoteControl remoteController;
 
     /**
      * Code here will run once as soon as the robot starts
@@ -43,23 +43,6 @@ public class Robot extends TimedRobot
     public void robotInit() 
     {
         /*
-		int portNumber = 7272;
-		
-		try (
-			 ServerSocket serverSocket = new ServerSocket(portNumber);
-			 Socket clientSocket = serverSocket.accept();
-			 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-			 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			 ) {
-			String inputLine;
-			while ((inputLine = in.readLine()) != null)
-			{
-				out.println(inputLine);
-			}
-		} catch (IOException e) {
-			System.out.println("Exception caught when trying to listen on port " + portNumber + " or listening for a connection");
-			System.out.println(e.getMessage());
-        }
         // Setup: Communications
         TRCNetworkData.initializeNetworkData(DataInterfaceType.Board);
         TRCNetworkData.createDataPoint("Encoder Output");
@@ -139,6 +122,23 @@ public class Robot extends TimedRobot
         hasCompleted = false;
     }
     */
+
+    /**
+     * Code here will run once at the start of autonomous
+     */
+    @Override
+    public void autonomousInit()
+    {
+        remoteController = new RemoteControl(Constants.REMOTECONTROL_DEFAULT_PORT);
+        remoteController.startRemoteConnection();
+    }
+
+    @Override
+    public void disabledInit()
+    {
+        remoteController.stopRemoteConnection();
+        TRCDrivePID.denySubautonomousAction();
+    }
 
     /**
      * Code here will run continously during autonomous

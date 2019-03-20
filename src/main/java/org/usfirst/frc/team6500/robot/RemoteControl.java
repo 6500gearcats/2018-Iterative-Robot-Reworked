@@ -64,8 +64,14 @@ public class RemoteControl
 			 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 			 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			 ) {
+            if (!isValid)
+            {
+                serverSocket.close();
+                clientSocket.close();
+                return;
+            }
 			String inputLine;
-			while ((inputLine = in.readLine()) != null && isValid)
+			while ((inputLine = in.readLine()) != null)
 			{
                 out.println(inputLine);
                 this.interperateCommand(inputLine);
@@ -83,7 +89,9 @@ public class RemoteControl
 
     private void interperateCommand(String command)
     {
-        TRCDrivePID.grantSubautonomousAction();
+        boolean preAuthorized = TRCDrivePID.isSubautonomousAuthorized();
+        if (!preAuthorized) TRCDrivePID.grantSubautonomousAction();
+
         TRCVector movement = null;
         switch (command.charAt(0))
         {
@@ -94,7 +102,7 @@ public class RemoteControl
             }
             case Constants.REMOTECONTROL_ACTION_FORWARDRIGHT:
             {
-                movement = new TRCVector(1, UnitType.Inches, Direction.ForwardRight);
+                movement = new TRCVector(Direction.ForwardRight, 1, UnitType.Inches);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_RIGHT:
@@ -104,7 +112,7 @@ public class RemoteControl
             }
             case Constants.REMOTECONTROL_ACTION_BACKWARDRIGHT:
             {
-                movement = new TRCVector(1, UnitType.Inches, Direction.BackwardRight);
+                movement = new TRCVector(Direction.BackwardRight, 1, UnitType.Inches);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_BACKWARD:
@@ -114,7 +122,7 @@ public class RemoteControl
             }
             case Constants.REMOTECONTROL_ACTION_BACKWARDLEFT:
             {
-                movement = new TRCVector(1, UnitType.Inches, Direction.BackwardLeft);
+                movement = new TRCVector(Direction.BackwardLeft, 1, UnitType.Inches);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_LEFT:
@@ -124,7 +132,7 @@ public class RemoteControl
             }
             case Constants.REMOTECONTROL_ACTION_FORWARDLEFT:
             {
-                movement = new TRCVector(1, UnitType.Inches, Direction.ForwardLeft);
+                movement = new TRCVector(Direction.ForwardLeft, 1, UnitType.Inches);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_ROTATELEFT:
@@ -137,9 +145,14 @@ public class RemoteControl
                 movement = new TRCVector(DriveAction.Rotation, 90, UnitType.Degrees);
                 break;
             }
-            default: TRCNetworkData.logString(TRCTypes.VerbosityType.Log_Error, "Recieved invalid remote control command"); TRCDrivePID.denySubautonomousAction(); return;
+            default: 
+            {
+                TRCNetworkData.logString(TRCTypes.VerbosityType.Log_Error, "Recieved invalid remote control command");
+                if (!preAuthorized) TRCDrivePID.denySubautonomousAction(); 
+                return;
+            }
         }
         TRCDrivePID.drive(movement);
-        TRCDrivePID.denySubautonomousAction();
+        if (!preAuthorized) TRCDrivePID.denySubautonomousAction();
     }
 }
