@@ -1,75 +1,98 @@
 package org.usfirst.frc.team6500.robot;
 
+import java.io.*;
+import java.net.*;
 
+import org.usfirst.frc.team6500.trc.util.*;
+/*
 import org.usfirst.frc.team6500.robot.Constants;
 import org.usfirst.frc.team6500.trc.auto.TRCDirectionalSystemAction;
 import org.usfirst.frc.team6500.trc.auto.TRCDrivePID;
 import org.usfirst.frc.team6500.trc.systems.TRCDirectionalSystem;
 import org.usfirst.frc.team6500.trc.systems.TRCDriveInput;
-import org.usfirst.frc.team6500.trc.util.TRCNetworkData;
-import org.usfirst.frc.team6500.trc.util.TRCTypes;
 import org.usfirst.frc.team6500.trc.wrappers.sensors.TRCEncoderSet;
 import org.usfirst.frc.team6500.trc.wrappers.sensors.TRCGyroBase;
 import org.usfirst.frc.team6500.trc.wrappers.systems.drives.TRCMecanumDrive;
-import org.usfirst.frc.team6500.trc.util.TRCController;
+*/
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.RobotBase;
 
-
-public class Robot extends TimedRobot
-{
-    // Robot member definitions
-    TRCGyroBase gyro;
-    TRCEncoderSet encoders;
-    TRCMecanumDrive drive;
-    TRCDirectionalSystem lift, grabber;
-    int positionOptionID = 1;
-    int targetOptionID = 2;
-
-    AutoRun richardRunner;
-    boolean hasCompleted;
+public class Robot extends TimedRobot {
+    /*
+     * // Robot member definitions TRCGyroBase gyro; TRCEncoderSet encoders;
+     * TRCMecanumDrive drive; TRCDirectionalSystem lift, grabber; int
+     * positionOptionID = 1; int targetOptionID = 2;
+     * 
+     * AutoRun richardRunner; boolean hasCompleted;
+     */
 
     /**
      * Code here will run once as soon as the robot starts
      */
+    /*
+     * @Override public void robotInit() { // Setup: Communications
+     * TRCNetworkData.initializeNetworkData(TRCTypes.DataInterfaceType.Board);
+     * TRCNetworkData.createDataPoint("Encoder Output");
+     * TRCNetworkData.createDataPoint("Encoder 0");
+     * TRCNetworkData.createDataPoint("Encoder 1");
+     * TRCNetworkData.createDataPoint("Encoder 2");
+     * TRCNetworkData.createDataPoint("Encoder 3"); //
+     * TRCNetworkVision.initializeVision(); //TRCCamera.initializeCamera();
+     * 
+     * // Setup: Systems: Drivetrain boolean[] inversion = {true, true, true, true};
+     * drive = new TRCMecanumDrive(Constants.DRIVE_WHEEL_PORTS,
+     * Constants.DRIVE_WHEEL_TYPES, inversion, true);
+     * 
+     * // Setup: Systems: Directional lift = new
+     * TRCDirectionalSystem(Constants.LIFT_MOTORS, Constants.LIFT_MOTOR_TYPES, true,
+     * 1.0, -0.6); //grabber = new TRCDirectionalSystem(Constants.GRABBER_MOTORS,
+     * Constants.GRABBER_MOTOR_TYPES, true, 1.0, -1.0);
+     * TRCDirectionalSystemAction.registerSystem("Lift", lift);
+     * //TRCDirectionalSystemAction.registerSystem("Grabber", grabber);
+     * 
+     * // Setup: Systems: Sensors gyro = new TRCGyroBase(TRCTypes.GyroType.NavX);
+     * encoders = new TRCEncoderSet(Constants.ENCODER_INPUTS,
+     * Constants.ENCODER_DISTANCES_PER_PULSE, true, 4, Constants.ENCODER_TYPES);
+     * encoders.resetAllEncoders();
+     * 
+     * // Setup: Input: Button Bindings: Grabber
+     * //TRCDriveInput.bindButton(Constants.INPUT_GUNNER_PORT,
+     * Constants.INPUT_GRAB_PULL_BUTTON, grabber::driveForward);
+     * //TRCDriveInput.bindButton(Constants.INPUT_GUNNER_PORT,
+     * Constants.INPUT_GRAB_RELEASE_BUTTON, grabber::driveReverse);
+     * //TRCDriveInput.bindButtonAbsence(Constants.INPUT_GUNNER_PORT,
+     * Constants.INPUT_GRAB_BUTTONS, grabber::fullStop); }
+     */
+
     @Override
-    public void robotInit()
+    public void robotInit() 
     {
-        // Setup: Communications
-        TRCNetworkData.initializeNetworkData(TRCTypes.DataInterfaceType.Board);
-        TRCNetworkData.createDataPoint("Encoder Output");
-        TRCNetworkData.createDataPoint("Encoder 0");
-        TRCNetworkData.createDataPoint("Encoder 1");
-        TRCNetworkData.createDataPoint("Encoder 2");
-        TRCNetworkData.createDataPoint("Encoder 3");
-        // TRCNetworkVision.initializeVision();
-        //TRCCamera.initializeCamera();
-
-        // Setup: Systems: Drivetrain
-        boolean[] inversion = {true, true, true, true};
-        drive = new TRCMecanumDrive(Constants.DRIVE_WHEEL_PORTS, Constants.DRIVE_WHEEL_TYPES, inversion, true);
-
-        // Setup: Systems: Directional
-        lift = new TRCDirectionalSystem(Constants.LIFT_MOTORS, Constants.LIFT_MOTOR_TYPES, true, 1.0, -0.6);
-        //grabber = new TRCDirectionalSystem(Constants.GRABBER_MOTORS, Constants.GRABBER_MOTOR_TYPES, true, 1.0, -1.0);
-        TRCDirectionalSystemAction.registerSystem("Lift", lift);
-        //TRCDirectionalSystemAction.registerSystem("Grabber", grabber);
-
-        // Setup: Systems: Sensors
-        gyro = new TRCGyroBase(TRCTypes.GyroType.NavX);
-        encoders = new TRCEncoderSet(Constants.ENCODER_INPUTS, Constants.ENCODER_DISTANCES_PER_PULSE, true, 4, Constants.ENCODER_TYPES);
-        encoders.resetAllEncoders();
-
-        // Setup: Input: Button Bindings: Grabber
-        //TRCDriveInput.bindButton(Constants.INPUT_GUNNER_PORT, Constants.INPUT_GRAB_PULL_BUTTON, grabber::driveForward);
-        //TRCDriveInput.bindButton(Constants.INPUT_GUNNER_PORT, Constants.INPUT_GRAB_RELEASE_BUTTON, grabber::driveReverse);
-        //TRCDriveInput.bindButtonAbsence(Constants.INPUT_GUNNER_PORT, Constants.INPUT_GRAB_BUTTONS, grabber::fullStop);
+		int portNumber = 7272;
+		
+		try (
+			 ServerSocket serverSocket = new ServerSocket(portNumber);
+			 Socket clientSocket = serverSocket.accept();
+			 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+			 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			 ) {
+			String inputLine;
+			while ((inputLine = in.readLine()) != null)
+			{
+				out.println(inputLine);
+			}
+		} catch (IOException e) {
+			System.out.println("Exception caught when trying to listen on port " + portNumber + " or listening for a connection");
+			System.out.println(e.getMessage());
+        }
     }
 
     /**
      * Code here will run once at the start of autonomous
      */
+    /*
     @Override
     public void autonomousInit()
     {
@@ -83,10 +106,12 @@ public class Robot extends TimedRobot
         richardRunner = new AutoRun(90);
         hasCompleted = false;
     }
+    */
 
     /**
      * Code here will run continously during autonomous
      */
+    /*
     @Override
     public void autonomousPeriodic()
     {
@@ -96,10 +121,12 @@ public class Robot extends TimedRobot
             hasCompleted = true;
         }
     }
+    */
 
     /**
      * Code here will run once at the start of teleop
      */
+    /*
     @Override
     public void teleopInit()
     {
@@ -111,10 +138,12 @@ public class Robot extends TimedRobot
         TRCDriveInput.bindButton(TRCController.BUMPER_LEFT, upActions);
         TRCDriveInput.bindButton(TRCController.BUMPER_RIGHT, downActions);
     }
+    */
 
     /**
      * Code here will run continously during teleop
      */
+    /*
     @Override
     public void teleopPeriodic()
     {
@@ -129,6 +158,7 @@ public class Robot extends TimedRobot
         TRCNetworkData.updateDataPoint("Encoder 2", encoders.getIndividualDistanceTraveled(2));
         TRCNetworkData.updateDataPoint("Encoder 3", encoders.getIndividualDistanceTraveled(3));
     }
+    */
     public static void main(String... args)
     {
         RobotBase.startRobot(Robot::new);

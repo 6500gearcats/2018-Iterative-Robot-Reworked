@@ -71,4 +71,16 @@ public class Constants
     public final static EncoderType ENCODER_TYPES[] = {EncoderType.Talon, EncoderType.Talon, EncoderType.Talon, EncoderType.Talon};
 
     public final static double[] ENCODER_DISTANCES_PER_PULSE = {0.53, 0.0240, 0.02832, 0.02542};
+
+    public final static int REMOTECONTROL_ACTION_FORWARD = 0;
+    public final static int REMOTECONTROL_ACTION_FORWARDRIGHT = 1;
+    public final static int REMOTECONTROL_ACTION_RIGHT = 2;
+    public final static int REMOTECONTROL_ACTION_BACKWARDRIGHT = 3;
+    public final static int REMOTECONTROL_ACTION_BACKWARD = 4;
+    public final static int REMOTECONTROL_ACTION_BACKWARDLEFT = 5;
+    public final static int REMOTECONTROL_ACTION_LEFT = 6;
+    public final static int REMOTECONTROL_ACTION_FORWARDLEFT = 7;
+    public final static int REMOTECONTROL_ACTION_ROTATELEFT = 8;
+    public final static int REMOTECONTROL_ACTION_ROTATERIGHT = 9;
+
 }
