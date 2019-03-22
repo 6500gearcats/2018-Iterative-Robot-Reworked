@@ -136,7 +136,7 @@ public class Robot extends TimedRobot
     @Override
     public void disabledInit()
     {
-        remoteController.stopRemoteConnection();
+        if (remoteController != null) remoteController.stopRemoteConnection();
         TRCDrivePID.denySubautonomousAction();
     }
 

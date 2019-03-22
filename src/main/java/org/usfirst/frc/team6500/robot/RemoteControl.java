@@ -16,7 +16,7 @@ import org.usfirst.frc.team6500.trc.util.TRCTypes.VerbosityType;
 
 public class RemoteControl
 {
-    static private ArrayList<RemoteControl> openConnections;
+    static private ArrayList<RemoteControl> openConnections = new ArrayList<RemoteControl>();
     private Integer port = Constants.REMOTECONTROL_DEFAULT_PORT;
     private Thread runnable = new Thread(this::control);
     private boolean isValid = false;
@@ -116,42 +116,42 @@ public class RemoteControl
         {
             case Constants.REMOTECONTROL_ACTION_FORWARD:
             {
-                movement = new TRCVector(DriveAction.ForwardBack, 1, UnitType.Inches);
+                movement = new TRCVector(DriveAction.ForwardBack, 1, UnitType.General);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_FORWARDRIGHT:
             {
-                movement = new TRCVector(Direction.ForwardRight, 1, UnitType.Inches);
+                movement = new TRCVector(Direction.ForwardRight, 1, UnitType.General);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_RIGHT:
             {
-                movement = new TRCVector(DriveAction.LeftRight, 1, UnitType.Inches);
+                movement = new TRCVector(DriveAction.LeftRight, 1, UnitType.General);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_BACKWARDRIGHT:
             {
-                movement = new TRCVector(Direction.BackwardRight, 1, UnitType.Inches);
+                movement = new TRCVector(Direction.BackwardRight, 1, UnitType.General);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_BACKWARD:
             {
-                movement = new TRCVector(DriveAction.ForwardBack, -1, UnitType.Inches);
+                movement = new TRCVector(DriveAction.ForwardBack, -1, UnitType.General);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_BACKWARDLEFT:
             {
-                movement = new TRCVector(Direction.BackwardLeft, 1, UnitType.Inches);
+                movement = new TRCVector(Direction.BackwardLeft, 1, UnitType.General);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_LEFT:
             {
-                movement = new TRCVector(DriveAction.LeftRight, -1, UnitType.Inches);
+                movement = new TRCVector(DriveAction.LeftRight, -1, UnitType.General);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_FORWARDLEFT:
             {
-                movement = new TRCVector(Direction.ForwardLeft, 1, UnitType.Inches);
+                movement = new TRCVector(Direction.ForwardLeft, 1, UnitType.General);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_ROTATELEFT:
@@ -166,7 +166,6 @@ public class RemoteControl
             }
             default: 
             {
-                TRCNetworkData.logString(TRCTypes.VerbosityType.Log_Error, "Recieved invalid remote control command");
                 if (!preAuthorized) TRCDrivePID.denySubautonomousAction(); 
                 return;
             }
