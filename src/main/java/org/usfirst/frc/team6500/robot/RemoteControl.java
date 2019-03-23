@@ -78,15 +78,15 @@ public class RemoteControl
 			 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 			 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			 ) {
-            if (!isValid)
-            {
-                serverSocket.close();
-                clientSocket.close();
-                return;
-            }
 			String inputLine;
 			while ((inputLine = in.readLine()) != null)
 			{
+                if (!isValid)
+                {
+                    serverSocket.close();
+                    clientSocket.close();
+                    return;
+                }
                 out.println(inputLine);
                 this.interperateCommand(inputLine);
 			}

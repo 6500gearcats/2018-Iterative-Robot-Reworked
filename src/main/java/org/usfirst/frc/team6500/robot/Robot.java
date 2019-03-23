@@ -1,7 +1,6 @@
 package org.usfirst.frc.team6500.robot;
 
 // import org.usfirst.frc.team6500.robot.*;
-/*
 import org.usfirst.frc.team6500.robot.Constants;
 import org.usfirst.frc.team6500.trc.auto.TRCDirectionalSystemAction;
 import org.usfirst.frc.team6500.trc.systems.TRCDirectionalSystem;
@@ -13,17 +12,15 @@ import org.usfirst.frc.team6500.trc.util.TRCTypes.*;
 import org.usfirst.frc.team6500.trc.wrappers.sensors.TRCEncoderSet;
 import org.usfirst.frc.team6500.trc.wrappers.sensors.TRCGyroBase;
 import org.usfirst.frc.team6500.trc.wrappers.systems.drives.TRCMecanumDrive;
-*/
 import org.usfirst.frc.team6500.trc.auto.TRCDrivePID;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-// import edu.wpi.first.wpilibj.AnalogInput;
-// import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
 
 public class Robot extends TimedRobot
 {
-    /*
     // Robot member definitions
     TRCGyroBase gyro;
     TRCEncoderSet encoders;
@@ -33,7 +30,6 @@ public class Robot extends TimedRobot
     DigitalInput hE;
     int positionOptionID = 1;
     int targetOptionID = 2;
-    */
     public RemoteControl remoteController = null;
 
     /**
@@ -42,7 +38,6 @@ public class Robot extends TimedRobot
     @Override
     public void robotInit()
     {
-        /*
         // Setup: Communications
         TRCNetworkData.initializeNetworkData(DataInterfaceType.Board);
         TRCNetworkData.createDataPoint("Encoder Output");
@@ -54,9 +49,7 @@ public class Robot extends TimedRobot
         TRCNetworkData.createDataPoint("Left Proximity");
         TRCNetworkData.createDataPoint("Right Proximity");
         TRCNetworkData.createDataPoint("Hall Effect");
-        TRCNetworkVision.initializeVision();
         //TRCCamera.initializeCamera();
-
 
         // Setup: Systems: Drivetrain
         drive = new TRCMecanumDrive(Constants.DRIVE_WHEEL_PORTS, Constants.DRIVE_WHEEL_TYPES, Constants.DRIVE_WHEEL_INVERTS, true);
@@ -74,20 +67,15 @@ public class Robot extends TimedRobot
         leftProx  = new AnalogInput(Constants.PROXIMITY_LEFT);
         rightProx = new AnalogInput(Constants.PROXIMITY_RIGHT);
         hE = new DigitalInput(0);
-        AutoAlign.setupAlignment(drive, leftProx, rightProx);
-
 
         // Setup: Autonomous
         TRCDrivePID.initializeTRCDrivePID(encoders, gyro, drive, DriveType.Mecanum, Constants.SPEED_AUTO);
-        AutoAlign.setupAlignment(drive, leftProx, rightProx);
 
         // Setup: Autonomous: Options
         TRCNetworkData.putOptions(Constants.OPTIONS_POSITIONS, positionOptionID);
         TRCNetworkData.putOptions(Constants.OPTIONS_TARGETS, targetOptionID);
 
-
         // Setup: Input
-        
         TRCDriveInput.initializeDriveInput(Constants.INPUT_PORTS, Constants.INPUT_TYPES, Constants.SPEED_BASE, Constants.SPEED_BOOST);
 
         // Setup: Input: Button Bindings: Grabber
@@ -99,9 +87,6 @@ public class Robot extends TimedRobot
         // TRCDriveInput.bindButtonPress(Constants.INPUT_DRIVER_PORT, Constants.INPUT_LIFT_ELEVATE_BUTTON, lift::driveForward);
         // TRCDriveInput.bindButtonPress(Constants.INPUT_DRIVER_PORT, Constants.INPUT_LIFT_DESCEND_BUTTON, lift::driveReverse);
         // TRCDriveInput.bindButtonAbsence(Constants.INPUT_DRIVER_PORT, Constants.INPUT_LIFT_BUTTONS, lift::fullStop);
-
-        TRCDriveInput.bindButtonPress(Constants.INPUT_DRIVER_PORT, 4, AutoAlign::alignWithFloorTape);
-        */
     }
 
     /**
@@ -143,17 +128,11 @@ public class Robot extends TimedRobot
     /**
      * Code here will run continously during autonomous
      */
-    /*
     @Override
     public void autonomousPeriodic()
     {
-        if (!hasCompleted)
-        {
-            TRCDrivePID.driveAround(12, 90);
-            hasCompleted = true;
-        }
+        if (!TRCDrivePID.isDriving()) drive.driveCartesian(0.0, 0.0, 0.0);
     }
-    */
 
     /**
      * Code here will run once at the start of teleop
@@ -200,6 +179,20 @@ public class Robot extends TimedRobot
         TRCNetworkData.updateDataPoint("Hall Effect", hE.get());
     }
     */
+
+    @Override
+    public void teleopPeriodic()
+    {
+        // Check all inputs
+        TRCDriveInput.checkButtonBindings();
+        // And drive the robot
+        TRCDriveParams params = TRCDriveInput.getStickDriveParams(Constants.INPUT_DRIVER_PORT);
+        TRCController controller = TRCDriveInput.getController(Constants.INPUT_DRIVER_PORT);
+        params.setRawX(controller.getAxis(XboxAxisType.LeftX));
+        params.setRawY(controller.getAxis(XboxAxisType.LeftY));
+        params.setRawZ(controller.getAxis(XboxAxisType.RightX));
+        drive.driveCartesian(params);
+    }
     public static void main(String... args)
     {
         RobotBase.startRobot(Robot::new);
