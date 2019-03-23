@@ -20,6 +20,7 @@ public class RemoteControl
     private Integer port = Constants.REMOTECONTROL_DEFAULT_PORT;
     private Thread runnable = new Thread(this::control);
     private boolean isValid = false;
+    
 
     /**
      * Creates a {@link RemoteControl} object opening to the specified port
@@ -89,7 +90,10 @@ public class RemoteControl
                 }
                 out.println(inputLine);
                 this.interperateCommand(inputLine);
-			}
+            }
+            
+            serverSocket.close();
+            clientSocket.close();
 		} catch (IOException e) {
 			System.out.println("Exception caught when trying to listen on port " + port + " or listening for a connection");
 			System.out.println(e.getMessage());
@@ -164,13 +168,17 @@ public class RemoteControl
                 movement = new TRCVector(DriveAction.Rotation, 90, UnitType.Degrees);
                 break;
             }
-            default: 
+            case Constants.REMOTECONTROL_ACTION_STOP:
             {
-                if (!preAuthorized) TRCDrivePID.denySubautonomousAction(); 
-                return;
+                
+            }
+            default:
+            {
+                
+                break;
             }
         }
-        TRCDrivePID.drive(movement);
+        
         if (!preAuthorized) TRCDrivePID.denySubautonomousAction();
     }
 
