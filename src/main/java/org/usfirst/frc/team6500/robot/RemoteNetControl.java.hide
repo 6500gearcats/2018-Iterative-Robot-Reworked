@@ -17,36 +17,36 @@ import org.usfirst.frc.team6500.trc.util.TRCTypes.VerbosityType;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
 
-public class RemoteControl
+public class RemoteNetControl
 {
-    static private ArrayList<RemoteControl> openConnections = new ArrayList<RemoteControl>();
+    static private ArrayList<RemoteNetControl> openConnections = new ArrayList<RemoteNetControl>();
     private Integer port = Constants.REMOTECONTROL_DEFAULT_PORT;
     private Thread runnable = new Thread(this::control);
     private boolean isValid = false;
     private TRCArtificialDriver driver = new TRCArtificialDriver();
 
     /**
-     * Creates a {@link RemoteControl} object opening to the specified port
+     * Creates a {@link RemoteNetControl} object opening to the specified port
      */
-    RemoteControl(Integer port)
+    RemoteNetControl(Integer port)
     {
         this.port = port;
-        if (!RemoteControl.validatePort(port))
+        if (!RemoteNetControl.validatePort(port))
         {
-            TRCNetworkData.logString(VerbosityType.Log_Error, "RemoteControl:RemoteControl(Integer):Unable to bind to port '" + port + "' because it is already bound!");
+            TRCNetworkData.logString(VerbosityType.Log_Error, "RemoteNetControl:RemoteNetControl(Integer):Unable to bind to port '" + port + "' because it is already bound!");
         }
         else isValid = true;
         openConnections.add(this);
     }
 
     /**
-     * Creates a {@link RemoteControl} object opening to port 7272
+     * Creates a {@link RemoteNetControl} object opening to port 7272
      */
-    RemoteControl()
+    RemoteNetControl()
     {
-        if (!RemoteControl.validatePort(port))
+        if (!RemoteNetControl.validatePort(port))
         {
-            TRCNetworkData.logString(VerbosityType.Log_Error, "RemoteControl:RemoteControl():Unable to bind to port '" + port + "' because it is already bound!");
+            TRCNetworkData.logString(VerbosityType.Log_Error, "RemoteNetControl:RemoteNetControl():Unable to bind to port '" + port + "' because it is already bound!");
         }
         else isValid = true;
         openConnections.add(this);
@@ -108,7 +108,7 @@ public class RemoteControl
     public Integer port() {return port;}
     public boolean isValid() {return isValid;}
 
-    public static ArrayList<RemoteControl> openConnections() {return openConnections;}
+    public static ArrayList<RemoteNetControl> openConnections() {return openConnections;}
 
     /**
      * Interperates a command sent to the control server
@@ -191,7 +191,7 @@ public class RemoteControl
     private static boolean validatePort(int port)
     {
         // sorry for the formatting, its just compact!
-        for (RemoteControl rc : openConnections) if (rc.port == port) return false;
+        for (RemoteNetControl rc : openConnections) if (rc.port == port) return false;
         return true;
     }
 }
