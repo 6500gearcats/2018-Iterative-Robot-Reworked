@@ -17,6 +17,8 @@ import org.usfirst.frc.team6500.trc.auto.*;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.RobotBase;
 
 public class Robot extends TimedRobot {
@@ -36,7 +38,8 @@ public class Robot extends TimedRobot {
      * Code here will run once as soon as the robot starts
      */
     @Override
-    public void robotInit() {
+    public void robotInit() 
+    {
         // Setup: Communications
         TRCNetworkData.initializeNetworkData(DataInterfaceType.Board);
         TRCNetworkData.createDataPoint("Encoder Output");
@@ -96,7 +99,6 @@ public class Robot extends TimedRobot {
         // Constants.INPUT_LIFT_DESCEND_BUTTON, lift::driveReverse);
         // TRCDriveInput.bindButtonAbsence(Constants.INPUT_DRIVER_PORT,
         // Constants.INPUT_LIFT_BUTTONS, lift::fullStop);
-        arduino.startCommunications();
     }
 
     /**
@@ -109,7 +111,7 @@ public class Robot extends TimedRobot {
         encoders.resetAllEncoders();
         gyro.reset();
 
-        TRCDrivePID.initializeTRCDrivePID(encoders, gyro, drive, TRCTypes.DriveType.Mecanum, Constants.SPEED_AUTO);
+        
         // TRCNetworkData.putOptions(Constants.OPTIONS_POSITIONS, positionOptionID);
         // TRCNetworkData.putOptions(Constants.OPTIONS_TARGETS, targetOptionID);
 
@@ -124,7 +126,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit()
     {
-        
+        TRCDrivePID.initializeTRCDrivePID(encoders, gyro, drive, DriveType.Mecanum, Constants.SPEED_AUTO);
+        arduino.startCommunications();
     }
 
     @Override
