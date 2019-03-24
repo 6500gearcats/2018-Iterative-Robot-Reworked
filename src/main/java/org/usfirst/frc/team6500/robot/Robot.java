@@ -140,11 +140,6 @@ public class Robot extends TimedRobot {
     public void autonomousPeriodic()
     {
         if (!TRCDrivePID.isDriving()) drive.driveCartesian(0.0, 0.0, 0.0);
-
-        // request data from the Arduino
-        byte[] buffer = { 0 };
-        arduino.readOnly(buffer, 1);
-        
     }
 
     /**
@@ -206,7 +201,7 @@ public class Robot extends TimedRobot {
         params.setRawZ(controller.getAxis(XboxAxisType.RightX));
         drive.driveCartesian(params);
     }
-    public static void main(String... args)
+    public static void main(String... args) throws InterruptedException
     {
         RobotBase.startRobot(Robot::new);
     }

@@ -1,0 +1,39 @@
+# SIMPLE JAVA STUBS THAT I WANT TO SAVE...
+
+# BASE CODE FOR RECIVING DATA VIA 12C FROM THE ARDUINO
+// request data from the Arduino
+I2C arduino = new I2C(I2C.Port.kOnboard, 8);
+DigitalOutput output = new DigitalOutput(1);
+output.set(false);
+Thread.sleep(1000);
+output.set(true);
+Thread.sleep(1000);
+output.set(false);
+Thread.sleep(1000);
+while (true)
+{
+    byte[] buffer = new byte[1];
+    boolean noConnection = arduino.readOnly(buffer, 1);
+    if (!noConnection) output.set(true);
+    else output.set(false);
+    if (!noConnection)
+    {
+    switch (buffer[0])
+    {
+        case 1: output.set(true); break;
+        case 0: output.set(false); break;
+    }
+    }
+    Thread.sleep(1000);
+}
+
+# BLINK OUTPUT ON PORT 1 EVERY SECOND
+DigitalOutput output = new DigitalOutput(1);
+boolean value = false;
+output.set(false);
+while (true)
+{
+    value = !value;
+    output.set(value);
+    Thread.sleep(1000);
+}
