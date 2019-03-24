@@ -1,5 +1,7 @@
 package org.usfirst.frc.team6500.robot;
 
+import java.nio.ByteBuffer;
+
 // import org.usfirst.frc.team6500.robot.*;
 import org.usfirst.frc.team6500.robot.Constants;
 import org.usfirst.frc.team6500.trc.auto.TRCDirectionalSystemAction;
@@ -15,12 +17,13 @@ import org.usfirst.frc.team6500.trc.wrappers.systems.drives.TRCMecanumDrive;
 import org.usfirst.frc.team6500.trc.auto.TRCDrivePID;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import sun.nio.ByteBuffered;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.RobotBase;
 
-public class Robot extends TimedRobot
-{
+public class Robot extends TimedRobot {
     // Robot member definitions
     TRCGyroBase gyro;
     TRCEncoderSet encoders;
@@ -30,14 +33,14 @@ public class Robot extends TimedRobot
     DigitalInput hE;
     int positionOptionID = 1;
     int targetOptionID = 2;
-    public RemoteControl remoteController = null;
+
+    I2C arduino = new I2C(I2C.Port.kOnboard, 1);
 
     /**
      * Code here will run once as soon as the robot starts
      */
     @Override
-    public void robotInit()
-    {
+    public void robotInit() {
         // Setup: Communications
         TRCNetworkData.initializeNetworkData(DataInterfaceType.Board);
         TRCNetworkData.createDataPoint("Encoder Output");
@@ -49,22 +52,25 @@ public class Robot extends TimedRobot
         TRCNetworkData.createDataPoint("Left Proximity");
         TRCNetworkData.createDataPoint("Right Proximity");
         TRCNetworkData.createDataPoint("Hall Effect");
-        //TRCCamera.initializeCamera();
+        // TRCCamera.initializeCamera();
 
         // Setup: Systems: Drivetrain
-        drive = new TRCMecanumDrive(Constants.DRIVE_WHEEL_PORTS, Constants.DRIVE_WHEEL_TYPES, Constants.DRIVE_WHEEL_INVERTS, true);
+        drive = new TRCMecanumDrive(Constants.DRIVE_WHEEL_PORTS, Constants.DRIVE_WHEEL_TYPES,
+                Constants.DRIVE_WHEEL_INVERTS, true);
 
         // Setup: Systems: Directional
         lift = new TRCDirectionalSystem(Constants.LIFT_MOTORS, Constants.LIFT_MOTOR_TYPES, true, 1.0, -0.6);
-        //grabber = new TRCDirectionalSystem(Constants.GRABBER_MOTORS, Constants.GRABBER_MOTOR_TYPES, true, 1.0, -1.0);
+        // grabber = new TRCDirectionalSystem(Constants.GRABBER_MOTORS,
+        // Constants.GRABBER_MOTOR_TYPES, true, 1.0, -1.0);
         TRCDirectionalSystemAction.registerSystem("Lift", lift);
-        //TRCDirectionalSystemAction.registerSystem("Grabber", grabber);
+        // TRCDirectionalSystemAction.registerSystem("Grabber", grabber);
 
         // Setup: Systems: Sensors
         gyro = new TRCGyroBase(GyroType.NavX);
-        encoders = new TRCEncoderSet(Constants.ENCODER_INPUTS, Constants.ENCODER_DISTANCES_PER_PULSE, true, 4, Constants.ENCODER_TYPES);
+        encoders = new TRCEncoderSet(Constants.ENCODER_INPUTS, Constants.ENCODER_DISTANCES_PER_PULSE, true, 4,
+                Constants.ENCODER_TYPES);
         encoders.resetAllEncoders();
-        leftProx  = new AnalogInput(Constants.PROXIMITY_LEFT);
+        leftProx = new AnalogInput(Constants.PROXIMITY_LEFT);
         rightProx = new AnalogInput(Constants.PROXIMITY_RIGHT);
         hE = new DigitalInput(0);
 
@@ -76,17 +82,24 @@ public class Robot extends TimedRobot
         TRCNetworkData.putOptions(Constants.OPTIONS_TARGETS, targetOptionID);
 
         // Setup: Input
-        TRCDriveInput.initializeDriveInput(Constants.INPUT_PORTS, Constants.INPUT_TYPES, Constants.SPEED_BASE, Constants.SPEED_BOOST);
+        TRCDriveInput.initializeDriveInput(Constants.INPUT_PORTS, Constants.INPUT_TYPES, Constants.SPEED_BASE,
+                Constants.SPEED_BOOST);
 
         // Setup: Input: Button Bindings: Grabber
-        //TRCDriveInput.bindButton(Constants.INPUT_GUNNER_PORT, Constants.INPUT_GRAB_PULL_BUTTON, grabber::driveForward);
-        //TRCDriveInput.bindButton(Constants.INPUT_GUNNER_PORT, Constants.INPUT_GRAB_RELEASE_BUTTON, grabber::driveReverse);
-        //TRCDriveInput.bindButtonAbsence(Constants.INPUT_GUNNER_PORT, Constants.INPUT_GRAB_BUTTONS, grabber::fullStop);
+        // TRCDriveInput.bindButton(Constants.INPUT_GUNNER_PORT,
+        // Constants.INPUT_GRAB_PULL_BUTTON, grabber::driveForward);
+        // TRCDriveInput.bindButton(Constants.INPUT_GUNNER_PORT,
+        // Constants.INPUT_GRAB_RELEASE_BUTTON, grabber::driveReverse);
+        // TRCDriveInput.bindButtonAbsence(Constants.INPUT_GUNNER_PORT,
+        // Constants.INPUT_GRAB_BUTTONS, grabber::fullStop);
 
         // Setup: Input: Button Bindings: Lift
-        // TRCDriveInput.bindButtonPress(Constants.INPUT_DRIVER_PORT, Constants.INPUT_LIFT_ELEVATE_BUTTON, lift::driveForward);
-        // TRCDriveInput.bindButtonPress(Constants.INPUT_DRIVER_PORT, Constants.INPUT_LIFT_DESCEND_BUTTON, lift::driveReverse);
-        // TRCDriveInput.bindButtonAbsence(Constants.INPUT_DRIVER_PORT, Constants.INPUT_LIFT_BUTTONS, lift::fullStop);
+        // TRCDriveInput.bindButtonPress(Constants.INPUT_DRIVER_PORT,
+        // Constants.INPUT_LIFT_ELEVATE_BUTTON, lift::driveForward);
+        // TRCDriveInput.bindButtonPress(Constants.INPUT_DRIVER_PORT,
+        // Constants.INPUT_LIFT_DESCEND_BUTTON, lift::driveReverse);
+        // TRCDriveInput.bindButtonAbsence(Constants.INPUT_DRIVER_PORT,
+        // Constants.INPUT_LIFT_BUTTONS, lift::fullStop);
     }
 
     /**
@@ -114,15 +127,13 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousInit()
     {
-        remoteController = new RemoteControl(); // create a new remote controller on port 7272
-        remoteController.startRemoteConnection();
+        
     }
 
     @Override
     public void disabledInit()
     {
-        if (remoteController != null) remoteController.stopRemoteConnection();
-        TRCDrivePID.denySubautonomousAction();
+        
     }
 
     /**
@@ -132,6 +143,11 @@ public class Robot extends TimedRobot
     public void autonomousPeriodic()
     {
         if (!TRCDrivePID.isDriving()) drive.driveCartesian(0.0, 0.0, 0.0);
+
+        // request data from the Arduino
+        byte[] buffer = { 0 };
+        arduino.readOnly(buffer, 1);
+        
     }
 
     /**

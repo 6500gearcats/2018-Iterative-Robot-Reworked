@@ -7,6 +7,7 @@ import java.net.*;
 import org.usfirst.frc.team6500.robot.Constants;
 import org.usfirst.frc.team6500.trc.auto.TRCDrivePID;
 import org.usfirst.frc.team6500.trc.auto.TRCVector;
+import org.usfirst.frc.team6500.trc.auto.TRCArtificialDriver;
 import org.usfirst.frc.team6500.trc.util.TRCNetworkData;
 import org.usfirst.frc.team6500.trc.util.TRCTypes;
 import org.usfirst.frc.team6500.trc.util.TRCTypes.Direction;
@@ -14,13 +15,15 @@ import org.usfirst.frc.team6500.trc.util.TRCTypes.DriveAction;
 import org.usfirst.frc.team6500.trc.util.TRCTypes.UnitType;
 import org.usfirst.frc.team6500.trc.util.TRCTypes.VerbosityType;
 
+import edu.wpi.first.wpilibj.DigitalOutput;
+
 public class RemoteControl
 {
     static private ArrayList<RemoteControl> openConnections = new ArrayList<RemoteControl>();
     private Integer port = Constants.REMOTECONTROL_DEFAULT_PORT;
     private Thread runnable = new Thread(this::control);
     private boolean isValid = false;
-    
+    private TRCArtificialDriver driver = new TRCArtificialDriver();
 
     /**
      * Creates a {@link RemoteControl} object opening to the specified port
@@ -56,6 +59,7 @@ public class RemoteControl
     {
         if (!isValid) return;
         runnable.start();
+        driver.startDriving();
     }
 
     /**
@@ -64,6 +68,7 @@ public class RemoteControl
     public void stopRemoteConnection()
     {
         isValid = false;
+        driver.stopDriving();
         openConnections.remove(this);
     }
 
@@ -79,7 +84,7 @@ public class RemoteControl
 			 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 			 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			 ) {
-			String inputLine;
+            String inputLine;
 			while ((inputLine = in.readLine()) != null)
 			{
                 if (!isValid)
@@ -120,65 +125,61 @@ public class RemoteControl
         {
             case Constants.REMOTECONTROL_ACTION_FORWARD:
             {
-                movement = new TRCVector(DriveAction.ForwardBack, 1, UnitType.General);
+                movement = new TRCVector(DriveAction.ForwardBack, Direction.Forward);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_FORWARDRIGHT:
             {
-                movement = new TRCVector(Direction.ForwardRight, 1, UnitType.General);
+                movement = new TRCVector(DriveAction.Diagonal, Direction.ForwardRight);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_RIGHT:
             {
-                movement = new TRCVector(DriveAction.LeftRight, 1, UnitType.General);
+                movement = new TRCVector(DriveAction.LeftRight, Direction.Right);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_BACKWARDRIGHT:
             {
-                movement = new TRCVector(Direction.BackwardRight, 1, UnitType.General);
+                movement = new TRCVector(DriveAction.Diagonal, Direction.BackwardRight);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_BACKWARD:
             {
-                movement = new TRCVector(DriveAction.ForwardBack, -1, UnitType.General);
+                movement = new TRCVector(DriveAction.ForwardBack, Direction.Backward);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_BACKWARDLEFT:
             {
-                movement = new TRCVector(Direction.BackwardLeft, 1, UnitType.General);
+                movement = new TRCVector(DriveAction.Diagonal, Direction.BackwardLeft);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_LEFT:
             {
-                movement = new TRCVector(DriveAction.LeftRight, -1, UnitType.General);
+                movement = new TRCVector(DriveAction.LeftRight, Direction.Left);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_FORWARDLEFT:
             {
-                movement = new TRCVector(Direction.ForwardLeft, 1, UnitType.General);
+                movement = new TRCVector(DriveAction.LeftRight, Direction.ForwardLeft);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_ROTATELEFT:
             {
-                movement = new TRCVector(DriveAction.Rotation, -90, UnitType.Degrees);
+                movement = new TRCVector(DriveAction.Rotation, Direction.RotateLeft);
                 break;
             }
             case Constants.REMOTECONTROL_ACTION_ROTATERIGHT:
             {
-                movement = new TRCVector(DriveAction.Rotation, 90, UnitType.Degrees);
+                movement = new TRCVector(DriveAction.Rotation, Direction.RotateRight);
                 break;
-            }
-            case Constants.REMOTECONTROL_ACTION_STOP:
-            {
-                
             }
             default:
             {
-                
+                movement = new TRCVector();
                 break;
             }
         }
-        
+        driver.setAction(movement);
         if (!preAuthorized) TRCDrivePID.denySubautonomousAction();
     }
 
