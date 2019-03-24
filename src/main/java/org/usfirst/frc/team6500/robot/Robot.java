@@ -12,12 +12,11 @@ import org.usfirst.frc.team6500.trc.util.TRCTypes.*;
 import org.usfirst.frc.team6500.trc.wrappers.sensors.TRCEncoderSet;
 import org.usfirst.frc.team6500.trc.wrappers.sensors.TRCGyroBase;
 import org.usfirst.frc.team6500.trc.wrappers.systems.drives.TRCMecanumDrive;
-import org.usfirst.frc.team6500.trc.auto.TRCDrivePID;
+import org.usfirst.frc.team6500.trc.auto.*;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.RobotBase;
 
 public class Robot extends TimedRobot {
@@ -31,7 +30,7 @@ public class Robot extends TimedRobot {
     int positionOptionID = 1;
     int targetOptionID = 2;
 
-    I2C arduino = new I2C(I2C.Port.kOnboard, 1);
+    AssistedControl arduino = new AssistedControl(8);
 
     /**
      * Code here will run once as soon as the robot starts
@@ -97,6 +96,7 @@ public class Robot extends TimedRobot {
         // Constants.INPUT_LIFT_DESCEND_BUTTON, lift::driveReverse);
         // TRCDriveInput.bindButtonAbsence(Constants.INPUT_DRIVER_PORT,
         // Constants.INPUT_LIFT_BUTTONS, lift::fullStop);
+        arduino.startCommunications();
     }
 
     /**
