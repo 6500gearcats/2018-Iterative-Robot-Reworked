@@ -17,8 +17,6 @@ import org.usfirst.frc.team6500.trc.auto.*;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DigitalOutput;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.RobotBase;
 
 public class Robot extends TimedRobot {
@@ -126,14 +124,13 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit()
     {
-        TRCDrivePID.initializeTRCDrivePID(encoders, gyro, drive, DriveType.Mecanum, Constants.SPEED_AUTO);
         arduino.startCommunications();
     }
 
     @Override
     public void disabledInit()
     {
-        
+        arduino.stopCommunications();
     }
 
     /**
@@ -142,7 +139,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic()
     {
-        if (!TRCDrivePID.isDriving()) drive.driveCartesian(0.0, 0.0, 0.0);
+        // if (!TRCDrivePID.isDriving()) drive.driveCartesian(0.0, 0.0, 0.0);
     }
 
     /**

@@ -3,7 +3,6 @@ package org.usfirst.frc.team6500.robot;
 import org.usfirst.frc.team6500.trc.auto.TRCVector;
 import org.usfirst.frc.team6500.trc.auto.TRCArtificialDriver;
 import org.usfirst.frc.team6500.trc.auto.TRCDrivePID;
-import org.usfirst.frc.team6500.trc.util.TRCNetworkData;
 import org.usfirst.frc.team6500.trc.util.TRCTypes.*;
 
 import edu.wpi.first.wpilibj.I2C;
@@ -22,6 +21,7 @@ public class AssistedControl extends I2C
     public void startCommunications() 
     {
         readThread = new Thread(this::read);
+        readThread.setName("Assisted Control Thread");
         readThread.start();
         isReading = true;
     }
@@ -44,14 +44,14 @@ public class AssistedControl extends I2C
     {
         TRCDrivePID.grantSubautonomousAction();
         robby.startDriving();
-        while (isReading) 
+        while (this.isReading)
         {
             int action = requestAction();
-            System.out.println("Action is " + action);
             TRCVector movement = AssistedControl.interperateCommand(action);
+            System.out.println("Action is " + movement.getDirection().name() + "; number " + action);
             robby.setAction(movement);
             try {
-                Thread.sleep(5000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -67,65 +67,63 @@ public class AssistedControl extends I2C
      */
     private static TRCVector interperateCommand(int action)
     {
-        TRCVector movement = null;
         switch (action)
         {
             case Constants.REMOTECONTROL_ACTION_FORWARD:
             {
-                movement = new TRCVector(DriveAction.ForwardBack, Direction.Forward);
-                break;
+                TRCVector movement = new TRCVector(DriveAction.ForwardBack, Direction.Forward);
+                return movement;
             }
             case Constants.REMOTECONTROL_ACTION_FORWARDRIGHT:
             {
-                movement = new TRCVector(DriveAction.Diagonal, Direction.ForwardRight);
-                break;
+                TRCVector movement = new TRCVector(DriveAction.Diagonal, Direction.ForwardRight);
+                return movement;
             }
             case Constants.REMOTECONTROL_ACTION_RIGHT:
             {
-                movement = new TRCVector(DriveAction.LeftRight, Direction.Right);
-                break;
+                TRCVector movement = new TRCVector(DriveAction.LeftRight, Direction.Right);
+                return movement;
             }
             case Constants.REMOTECONTROL_ACTION_BACKWARDRIGHT:
             {
-                movement = new TRCVector(DriveAction.Diagonal, Direction.BackwardRight);
-                break;
+                TRCVector movement = new TRCVector(DriveAction.Diagonal, Direction.BackwardRight);
+                return movement;
             }
             case Constants.REMOTECONTROL_ACTION_BACKWARD:
             {
-                movement = new TRCVector(DriveAction.ForwardBack, Direction.Backward);
-                break;
+                TRCVector movement = new TRCVector(DriveAction.ForwardBack, Direction.Backward);
+                return movement;
             }
             case Constants.REMOTECONTROL_ACTION_BACKWARDLEFT:
             {
-                movement = new TRCVector(DriveAction.Diagonal, Direction.BackwardLeft);
-                break;
+                TRCVector movement = new TRCVector(DriveAction.Diagonal, Direction.BackwardLeft);
+                return movement;
             }
             case Constants.REMOTECONTROL_ACTION_LEFT:
             {
-                movement = new TRCVector(DriveAction.LeftRight, Direction.Left);
-                break;
+                TRCVector movement = new TRCVector(DriveAction.LeftRight, Direction.Left);
+                return movement;
             }
             case Constants.REMOTECONTROL_ACTION_FORWARDLEFT:
             {
-                movement = new TRCVector(DriveAction.LeftRight, Direction.ForwardLeft);
-                break;
+                TRCVector movement = new TRCVector(DriveAction.Diagonal, Direction.ForwardLeft);
+                return movement;
             }
             case Constants.REMOTECONTROL_ACTION_ROTATELEFT:
             {
-                movement = new TRCVector(DriveAction.Rotation, Direction.RotateLeft);
-                break;
+                TRCVector movement = new TRCVector(DriveAction.Rotation, Direction.RotateLeft);
+                return movement;
             }
             case Constants.REMOTECONTROL_ACTION_ROTATERIGHT:
             {
-                movement = new TRCVector(DriveAction.Rotation, Direction.RotateRight);
-                break;
+                TRCVector movement = new TRCVector(DriveAction.Rotation, Direction.RotateRight);
+                return movement;
             }
             default:
             {
-                movement = new TRCVector();
-                break;
+                TRCVector movement = new TRCVector();
+                return movement;
             }
         }
-        return movement;
     }
 }

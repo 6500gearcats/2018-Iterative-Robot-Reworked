@@ -35,7 +35,7 @@ public class Constants
     // Speed Constants
     public static final double SPEED_BASE = 0.85;
     public static final double SPEED_BOOST = 0.95;
-    public static final double SPEED_AUTO = 0.35;
+    public static final double SPEED_AUTO = 0.25;
 
 
     // Options Constants
@@ -89,8 +89,8 @@ public class Constants
 
     public final static double[] ENCODER_DISTANCES_PER_PULSE = {0.53, 0.0240, 0.02832, 0.02542};
 
-    public final static int REMOTECONTROL_ACTION_STOP = -1;
-    public final static int REMOTECONTROL_ACTION_FORWARD = 0;
+    public final static int REMOTECONTROL_ACTION_STOP = 0;
+    public final static int REMOTECONTROL_ACTION_FORWARD = 12;
     public final static int REMOTECONTROL_ACTION_FORWARDRIGHT = 1;
     public final static int REMOTECONTROL_ACTION_RIGHT = 2;
     public final static int REMOTECONTROL_ACTION_BACKWARDRIGHT = 3;
