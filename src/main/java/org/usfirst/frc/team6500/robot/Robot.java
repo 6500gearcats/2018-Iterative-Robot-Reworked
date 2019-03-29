@@ -139,7 +139,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic()
     {
-        // if (!TRCDrivePID.isDriving()) drive.driveCartesian(0.0, 0.0, 0.0);
+        if (!TRCDrivePID.isDriving()) drive.driveCartesian(0.0, 0.0, 0.0);
     }
 
     /**
@@ -200,6 +200,11 @@ public class Robot extends TimedRobot {
         params.setRawY(controller.getAxis(XboxAxisType.LeftY));
         params.setRawZ(controller.getAxis(XboxAxisType.RightX));
         drive.driveCartesian(params);
+    }
+
+    public void autoAlign()
+    {
+        arduino.startCommunications();
     }
     public static void main(String... args) throws InterruptedException
     {

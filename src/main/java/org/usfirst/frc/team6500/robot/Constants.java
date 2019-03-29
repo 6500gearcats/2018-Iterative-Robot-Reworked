@@ -35,7 +35,7 @@ public class Constants
     // Speed Constants
     public static final double SPEED_BASE = 0.85;
     public static final double SPEED_BOOST = 0.95;
-    public static final double SPEED_AUTO = 0.25;
+    public static final double SPEED_AUTO = 0.45;
 
 
     // Options Constants
@@ -100,6 +100,8 @@ public class Constants
     public final static int REMOTECONTROL_ACTION_FORWARDLEFT = 7;
     public final static int REMOTECONTROL_ACTION_ROTATERIGHT = 8;
     public final static int REMOTECONTROL_ACTION_ROTATELEFT = 9;
+    public final static int REMOTECONTROL_ACTION_CURVEFORWARDLEFT = 11;
+    public final static int REMOTECONTROL_ACTION_CURVEFORWARDRIGHT = 10;
 
     public final static int REMOTECONTROL_DEFAULT_PORT = 7272; // default port will always be (from now on 'cause I say) 7272
 

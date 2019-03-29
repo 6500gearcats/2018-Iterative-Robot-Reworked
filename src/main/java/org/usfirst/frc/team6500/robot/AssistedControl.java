@@ -48,10 +48,11 @@ public class AssistedControl extends I2C
         {
             int action = requestAction();
             TRCVector movement = AssistedControl.interperateCommand(action);
-            System.out.println("Action is " + movement.getDirection().name() + "; number " + action);
+            System.out.print("Action is " + movement.getDirection().name());
+            System.out.println("; number " + action);
             robby.setAction(movement);
             try {
-                Thread.sleep(1000);
+                Thread.sleep(20);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -117,6 +118,16 @@ public class AssistedControl extends I2C
             case Constants.REMOTECONTROL_ACTION_ROTATERIGHT:
             {
                 TRCVector movement = new TRCVector(DriveAction.Rotation, Direction.RotateRight);
+                return movement;
+            }
+            case Constants.REMOTECONTROL_ACTION_CURVEFORWARDLEFT:
+            {
+                TRCVector movement = new TRCVector(DriveAction.Curve, Direction.CurveForwardLeft);
+                return movement;
+            }
+            case Constants.REMOTECONTROL_ACTION_CURVEFORWARDRIGHT:
+            {
+                TRCVector movement = new TRCVector(DriveAction.Curve, Direction.CurveForwardRight);
                 return movement;
             }
             default:
